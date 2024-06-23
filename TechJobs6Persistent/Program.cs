@@ -3,8 +3,13 @@ using TechJobs6Persistent.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//connecting to database
+var connectionString = "server=localhost;user=TechJobs;password=TechJobs;database=TechJobs";
+var serverVersion = new MySqlServerVersion(new Version(8,0,36));
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<JobDbContext>(dbContextOptions => dbContextOptions.UseMySql(connectionString, serverVersion));
 
 var app = builder.Build();
 

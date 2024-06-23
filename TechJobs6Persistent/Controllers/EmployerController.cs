@@ -14,30 +14,60 @@ namespace TechJobs6Persistent.Controllers
 {
     public class EmployerController : Controller
     { 
+        private readonly JobDbContext context;
+
+        public EmployerController(JobDbContext dbcontext)
+        {
+            context = dbcontext;
+        }
+
         // GET: /<controller>/
         [HttpGet]
         public IActionResult Index()
         {
-            return View();
+            //Passing all of the employer objects to view
+            List<Employer> employers = context.Employers.Include(e => e.Name).ToList();
+            return View(employers);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            List<Employer> employers = context.Emplpyers.ToList();
+
+            AddEmployerViewModel addEventViewModel = new AddEventViewModel(employers);
+            return View(addEventViewModel);
         }
 
         [HttpPost]
-        public IActionResult ProcessCreateEmployerForm()
+        public IActionResult ProcessCreateEmployerForm(AddEmployerViewModel addEmployerViewModel)
         {
-            return View();
+            if(ModelState.IsValid)
+            {
+                Employer employer = new Employer
+                {
+                    Name = addEmployerViewModel.Name,
+                    Location = addEmployerViewModel.Location,
+                };
+                context.Employers.Add(employer);
+                return Redirect("Index");
+            }
+            return View("Create");
         }
 
         public IActionResult About(int id)
         {
-            return View();
+            //Checks to see if employer object exists in database
+            Employer? requestedEmployer = context.Employers.Find(id);
+            //If it exists, an object is created and after searching for item again it replicates specified data
+            if(requestedEmployer != null)
+            {
+                Employer theEmployer = context.Employer.Include(e => e.Name).Include(e => e.Location).Single(e => e.Id == id);
+                return View(theEmployer);
+            }
+            //If it does not exist, return user to Index page
+            return View("Index");
         }
-
     }
 }
 

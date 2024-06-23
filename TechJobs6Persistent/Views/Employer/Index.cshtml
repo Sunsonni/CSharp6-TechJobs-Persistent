@@ -10,7 +10,7 @@ else
 {
     <table class="table">
         <tr>
-            <th>Id
+            <th>Id</th>
             <th>Employer</th>
         </tr>
         @foreach (Employer employer in Model)
@@ -20,6 +20,8 @@ else
                 <td><a asp-controller="Employer" asp-action="About" asp-route-id="@employer.Id">@employer.Name</a></td>
             </tr>
         }
+        
     </table>
+    <a asp-area="" asp-controller="Employer" asp-action="Create">Add Employer</a>
 }
 
