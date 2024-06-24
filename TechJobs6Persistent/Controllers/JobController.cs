@@ -39,6 +39,10 @@ namespace TechJobs6Persistent.Controllers
         [HttpPost]
         public IActionResult ProcessAddJobForm()
         {
+            if(ModelState.IsValid)
+            {
+                
+            }
             return View();
         }
 

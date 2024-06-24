@@ -37,9 +37,10 @@ namespace TechJobs6Persistent.Controllers
             return View(addEmployerViewModel);
         }
 
-        [HttpPost]
+        [HttpPost("create")]
         public IActionResult ProcessCreateEmployerForm(AddEmployerViewModel addEmployerViewModel)
         {
+            //If all items pass, an employer object is created and saved to database
             if(ModelState.IsValid)
             {
                 Employer employer = new Employer
@@ -48,9 +49,11 @@ namespace TechJobs6Persistent.Controllers
                     Location = addEmployerViewModel.Location,
                 };
                 context.Employers.Add(employer);
-                return Redirect("Index");
+                context.SaveChanges();
+                return Redirect("/Employer");
             }
-            return View("Create");
+            //redirects to create page if not
+            return View("create", addEmployerViewModel);
         }
 
         public IActionResult About(int id)
@@ -60,7 +63,7 @@ namespace TechJobs6Persistent.Controllers
             //If it exists, an object is created and after searching for item again it replicates specified data
             if(requestedEmployer != null)
             {
-                Employer theEmployer = context.Employers.Include(e => e.Name).Include(e => e.Location).Single(e => e.Id == id);
+                Employer theEmployer = context.Employers.Find(id);
                 return View(theEmployer);
             }
             //If it does not exist, return user to Index page
