@@ -26,17 +26,15 @@ namespace TechJobs6Persistent.Controllers
         public IActionResult Index()
         {
             //Passing all of the employer objects to view
-            List<Employer> employers = context.Employers.Include(e => e.Name).ToList();
+            List<Employer> employers = context.Employers.ToList();
             return View(employers);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            List<Employer> employers = context.Emplpyers.ToList();
-
-            AddEmployerViewModel addEventViewModel = new AddEventViewModel(employers);
-            return View(addEventViewModel);
+            AddEmployerViewModel addEmployerViewModel = new AddEmployerViewModel();
+            return View(addEmployerViewModel);
         }
 
         [HttpPost]
@@ -62,7 +60,7 @@ namespace TechJobs6Persistent.Controllers
             //If it exists, an object is created and after searching for item again it replicates specified data
             if(requestedEmployer != null)
             {
-                Employer theEmployer = context.Employer.Include(e => e.Name).Include(e => e.Location).Single(e => e.Id == id);
+                Employer theEmployer = context.Employers.Include(e => e.Name).Include(e => e.Location).Single(e => e.Id == id);
                 return View(theEmployer);
             }
             //If it does not exist, return user to Index page
