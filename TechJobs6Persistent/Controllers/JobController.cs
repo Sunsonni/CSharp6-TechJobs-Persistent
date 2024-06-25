@@ -28,6 +28,7 @@ namespace TechJobs6Persistent.Controllers
 
             return View(jobs);
         }
+        [HttpGet("Add")]
 
         public IActionResult Add()
         {
@@ -36,14 +37,22 @@ namespace TechJobs6Persistent.Controllers
             return View(addJobViewModel);
         }
 
-        [HttpPost]
-        public IActionResult ProcessAddJobForm()
+        [HttpPost("Add")]
+        public IActionResult Add(AddJobViewModel addJobViewModel)
         {
             if(ModelState.IsValid)
             {
-                
+               Job job = new Job
+               {
+                Name = addJobViewModel.Name,
+                EmployerId = addJobViewModel.EmployerId
+               };
+                context.Jobs.Add(job);
+                context.SaveChanges();
+                return Redirect("/Job");
             }
-            return View();
+            addJobViewModel.Employers = context.Employers.ToList();
+            return View(addJobViewModel);
         }
 
         public IActionResult Delete()
