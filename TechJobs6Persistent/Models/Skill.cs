@@ -19,9 +19,7 @@ namespace TechJobs6Persistent.Models
             Jobs = new List<Job>();
         }
 
-        public Skill()
-        {
-        }
+        public Skill(){}
     }
 }
 
