@@ -14,16 +14,14 @@ namespace TechJobs6Persistent.Data
         public DbSet<Skill>? Skills { get; set; }
 
         public JobDbContext(DbContextOptions<JobDbContext> options)
-            : base(options)
-        {
-        }
+            : base(options){}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //set up your connection for one to many (employer to jobs)
+            //One to many (Employer to Jobs)
             modelBuilder.Entity<Job>().HasOne(p => p.Employer).WithMany(b => b.Jobs).HasForeignKey(e => e.EmployerId);
 
-            //set up your connection for many to many (skills to jobs)
+            //Many to many (Skills to Jobs)
             modelBuilder.Entity<Job>().HasMany(p => p.Skills).WithMany(b => b.Jobs).UsingEntity(a => a.ToTable("JobSkills"));
            
             base.OnModelCreating(modelBuilder);

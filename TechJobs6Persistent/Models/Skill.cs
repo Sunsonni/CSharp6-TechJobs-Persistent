@@ -5,6 +5,7 @@ namespace TechJobs6Persistent.Models
 {
     public class Skill
     {
+        //Skill items
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Name is required")]

@@ -28,11 +28,15 @@ namespace TechJobs6Persistent.Controllers
 
             return View(jobs);
         }
+
+
         [HttpGet("Add")]
 
         public IActionResult Add()
         {
+            //Creates list employer object and populates with database items
             List<Employer> employers = context.Employers.OrderBy(employers => employers.Name).ToList();
+            //Creates view model passes in employers and adds to view
             AddJobViewModel addJobViewModel = new AddJobViewModel(employers);
             return View(addJobViewModel);
         }
@@ -42,15 +46,18 @@ namespace TechJobs6Persistent.Controllers
         {
             if(ModelState.IsValid)
             {
+                //creates job object and sets properties
                Job job = new Job
                {
                 Name = addJobViewModel.Name,
                 EmployerId = addJobViewModel.EmployerId
                };
+               //passing to database and saving changes
                 context.Jobs.Add(job);
                 context.SaveChanges();
                 return Redirect("/Job");
             }
+            //if not valid, repopulates employers list for next round
             addJobViewModel.Employers = context.Employers.ToList();
             return View(addJobViewModel);
         }
